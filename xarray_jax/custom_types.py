@@ -92,7 +92,6 @@ class XjVariable(eqx.Module):
         self.attrs = attrs
 
     def to_xarray(self) -> xarray.Variable:
-        error_if_inside_jit()
         if self.data is None:
             return None
         return xarray.Variable(dims=self.dims, data=self.data, attrs=self.attrs)
@@ -118,7 +117,6 @@ class XjDataArray(eqx.Module):
         self.name = name
 
     def to_xarray(self) -> xarray.DataArray:
-        error_if_inside_jit()
         var = self.variable.to_xarray()
         if var is None:
             return None
@@ -147,7 +145,6 @@ class XjDataset(eqx.Module):
         self.attrs = attrs
 
     def to_xarray(self) -> xarray.Dataset:
-        error_if_inside_jit()
         data_vars = {name: var.to_xarray() for name, var in self.variables.items()}
 
         data_vars = {name: var for name, var in data_vars.items() if var is not None}
